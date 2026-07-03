@@ -2,7 +2,6 @@ import { useState, useRef, useEffect, useMemo, useCallback } from "react";
 import { useUpload } from "@workspace/object-storage-web";
 import { useSubmitPeserta, useGetSuara, useCekPeserta, useGetStats, getGetSuaraQueryKey, getCekPesertaQueryKey, getGetStatsQueryKey } from "@workspace/api-client-react";
 import logoPeradi from "/logo-peradi.png";
-import logoPeradiSai from "/peradi-sai-logo-nobg.png";
 import "./index.css";
 
 /* ─── CONSTANTS ─────────────────────────────────────────────────────── */
@@ -1370,12 +1369,18 @@ export default function App() {
   return (
     <div className="page">
       {/* ── Header ── */}
-      <header className="hdr" style={{ justifyContent: "center" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 14, justifyContent: "center", flex: 1 }}>
-          <img src={logoPeradiSai} alt="PERADI Suara Advokat Indonesia" style={{ height: 44, objectFit: "contain", flexShrink: 0 }} />
-          <div className="hdr-info" style={{ textAlign: "left" }}>
-            <div className="hdr-title">Dewan Pimpinan Cabang</div>
-            <div className="hdr-sub">PERADI SUARA ADVOKAT INDONESIA MEDAN</div>
+      <header className="hdr" style={{ justifyContent: "center", padding: "10px 16px" }}>
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 5, width: "100%", textAlign: "center" }}>
+          <img
+            src={logoPeradi}
+            alt="PERADI Suara Advokat Indonesia Medan"
+            style={{ height: 54, width: 54, objectFit: "contain", background: "#fff", borderRadius: "50%", padding: 5, flexShrink: 0, boxShadow: "0 2px 8px rgba(0,0,0,.25)" }}
+          />
+          <div style={{ fontSize: 15, fontWeight: 800, color: "#fff", letterSpacing: 1, lineHeight: 1.25, textTransform: "uppercase" }}>
+            PERADI Suara Advokat Indonesia Medan
+          </div>
+          <div style={{ fontSize: 11, color: "rgba(255,255,255,.7)", fontWeight: 500, letterSpacing: 0.5 }}>
+            Dewan Pimpinan Cabang
           </div>
         </div>
       </header>
