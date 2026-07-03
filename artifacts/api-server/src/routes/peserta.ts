@@ -65,12 +65,14 @@ router.get("/peserta/cek", async (req: Request, res: Response) => {
 
 router.get("/stats", async (req: Request, res: Response) => {
   try {
-    const [[{ calon }], [{ peserta }]] = await Promise.all([
+    const [[{ calon }], [{ peserta }], [{ hadir }]] = await Promise.all([
       db.select({ calon: count() }).from(pesertaMuscabTable),
       db.select({ peserta: count() }).from(pesertaMuscabTable)
         .where(eq(pesertaMuscabTable.statusBayar, "terverifikasi")),
+      db.select({ hadir: count() }).from(pesertaMuscabTable)
+        .where(eq(pesertaMuscabTable.hadir, true)),
     ]);
-    res.json({ calon: Number(calon), peserta: Number(peserta) });
+    res.json({ calon: Number(calon), peserta: Number(peserta), hadir: Number(hadir) });
   } catch (error) {
     req.log.error({ err: error }, "Error fetching stats");
     res.status(500).json({ error: "Gagal mengambil statistik" });

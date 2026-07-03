@@ -61,7 +61,8 @@ export const SubmitPesertaResponse = zod.object({
  */
 export const GetStatsResponse = zod.object({
   "calon": zod.number(),
-  "peserta": zod.number()
+  "peserta": zod.number(),
+  "hadir": zod.number()
 })
 
 

@@ -958,6 +958,7 @@ function Kuorum() {
 function Hasil() {
   const [certFor, setCertFor] = useState<{ name: string; jabatan: string } | null>(null);
   const { data: suaraData } = useGetSuara({ query: { queryKey: getGetSuaraQueryKey(), refetchInterval: 15000 } });
+  const { data: statsData } = useGetStats({ query: { queryKey: getGetStatsQueryKey(), refetchInterval: 15000 } });
 
   const votesK = suaraData?.ketua ?? [0, 0];
   const votesS = suaraData?.sekjend ?? [0, 0];
@@ -965,6 +966,11 @@ function Hasil() {
   const totalS = votesS.reduce((a, b) => a + b, 0) || 1;
   const winnerK = KETUA[votesK.indexOf(Math.max(...votesK))];
   const winnerS = SEKJEND[votesS.indexOf(Math.max(...votesS))];
+
+  const hadirCount = statsData?.hadir ?? 0;
+  const pesertaCount = statsData?.peserta ?? 0;
+  const kuorumPct = pesertaCount > 0 ? Math.round(hadirCount / pesertaCount * 100) : 0;
+  const kuorumTercapai = kuorumPct >= 50;
 
   const renderBar = (cands: typeof KETUA, vt: number[], total: number, label: string) => {
     const wi = vt.indexOf(Math.max(...vt));
@@ -1005,6 +1011,43 @@ function Hasil() {
         </h2>
       </div>
 
+      {/* ── Statistik Kehadiran & Kuorum ── */}
+      <div style={{ display: "flex", gap: 10, marginBottom: 16, flexWrap: "wrap" }}>
+        {[
+          { label: "Peserta Terdaftar", val: pesertaCount, icon: "ti-users", color: N },
+          { label: "Sudah Hadir", val: hadirCount, icon: "ti-user-check", color: "#15803d" },
+          { label: "Kuorum", val: `${kuorumPct}%`, icon: "ti-shield-check", color: kuorumTercapai ? "#15803d" : "#b45309" },
+        ].map(({ label, val, icon, color }) => (
+          <div key={label} style={{ flex: 1, minWidth: 100, background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 12, padding: "14px 12px", textAlign: "center" }}>
+            <i className={`ti ${icon}`} style={{ fontSize: 22, color, marginBottom: 6, display: "block" }} />
+            <div style={{ fontWeight: 800, fontSize: 22, color }}>{val}</div>
+            <div style={{ fontSize: 11, color: "var(--text-muted)", marginTop: 2 }}>{label}</div>
+            {label === "Kuorum" && (
+              <div style={{ fontSize: 10, fontWeight: 700, color: kuorumTercapai ? "#15803d" : "#b45309", marginTop: 4 }}>
+                {kuorumTercapai ? "✓ Tercapai" : "Belum tercapai"}
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+
+      {/* ── Progress bar kuorum ── */}
+      <div className="card mb16" style={{ padding: "14px 16px" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
+          <div style={{ fontWeight: 700, fontSize: 12, color: N, textTransform: "uppercase", letterSpacing: .5 }}>
+            <i className="ti ti-users" style={{ marginRight: 4 }} />Progress Kehadiran
+          </div>
+          <div style={{ fontSize: 12, color: "var(--text-muted)" }}>{hadirCount} / {pesertaCount} peserta</div>
+        </div>
+        <div style={{ background: "var(--bg)", borderRadius: 8, height: 14, overflow: "hidden" }}>
+          <div style={{ height: "100%", width: `${Math.min(kuorumPct, 100)}%`, background: kuorumTercapai ? "#15803d" : G, borderRadius: 8, transition: "width .5s ease" }} />
+        </div>
+        <div style={{ fontSize: 11, color: "var(--text-muted)", marginTop: 6 }}>
+          Kuorum 50% = {Math.ceil(pesertaCount * 0.5)} peserta · diperbarui setiap 15 detik
+        </div>
+      </div>
+
+      {/* ── Hero hasil voting ── */}
       <div style={{ background: `linear-gradient(135deg, ${N} 0%, #1a4a8e 100%)`, borderRadius: 16, padding: "28px 24px", marginBottom: 20, textAlign: "center", position: "relative", overflow: "hidden", boxShadow: "0 8px 32px rgba(11,45,110,.3)" }}>
         <div style={{ position: "absolute", top: -30, right: -30, width: 140, height: 140, borderRadius: "50%", border: "30px solid rgba(201,162,39,.15)" }} />
         <div style={{ position: "absolute", bottom: -20, left: -20, width: 100, height: 100, borderRadius: "50%", border: "20px solid rgba(201,162,39,.1)" }} />
@@ -1012,7 +1055,7 @@ function Hasil() {
           <div style={{ fontSize: 11, fontWeight: 700, color: G, letterSpacing: 3, textTransform: "uppercase", marginBottom: 6 }}>Hasil Musyawarah Cabang II 2026</div>
           <div style={{ fontSize: 13, color: "rgba(255,255,255,.6)", marginBottom: 20 }}>DPC PERADI SAI Medan · {MUSCAB_TGL}</div>
           <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
-            {[{ jab: "Ketua DPC Terpilih", cand: winnerK, pct: Math.round(votesK[0] / totalK * 100) }, { jab: "Sekjend Terpilih", cand: winnerS, pct: Math.round(Math.max(...votesS) / totalS * 100) }].map(({ jab, cand, pct }) => (
+            {[{ jab: "Ketua DPC Terpilih", cand: winnerK, pct: Math.round(Math.max(...votesK) / totalK * 100) }, { jab: "Sekjend Terpilih", cand: winnerS, pct: Math.round(Math.max(...votesS) / totalS * 100) }].map(({ jab, cand, pct }) => (
               <div key={jab} style={{ background: "rgba(255,255,255,.08)", border: `1.5px solid ${G}40`, borderRadius: 12, padding: "18px 24px", minWidth: 190, flex: 1, maxWidth: 260 }}>
                 <div style={{ fontSize: 11, color: G, fontWeight: 700, marginBottom: 10, letterSpacing: .5 }}>{jab}</div>
                 <div style={{ width: 52, height: 52, borderRadius: "50%", background: G, display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 10px", fontSize: 18, fontWeight: 800, color: N }}>{cand.ini}</div>

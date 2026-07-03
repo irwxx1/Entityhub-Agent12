@@ -9,4 +9,5 @@
 export interface Stats {
   calon: number;
   peserta: number;
+  hadir: number;
 }

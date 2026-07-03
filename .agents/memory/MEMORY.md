@@ -1,3 +1,9 @@
 - [PERADI portal architecture](peradi-portal-arch.md) — monorepo structure, key libs, env vars, permanent constraints, DB columns, Rekapan Live status
-- [PERADI migration to new workspace](peradi-migration-workspace.md) — file sync from GitHub irwxx1/Memory-Execution-Agent, artifact registration pattern, DB schema created via executeSql
-- [PERADI security and auth](peradi-security.md) — bcrypt auth, requireRole middleware, suara voting is full_access only
+- [PERADI linode deploy](peradi-linode-deploy.md) — deploy scripts di folder deploy/, PostgreSQL perlu distart manual, GitHub remote: irwxx1/Memory-Execution-Agent
+- [PERADI orval hook options](peradi-orval-hooks.md) — orval-generated hooks require explicit queryKey in query options despite runtime fallback
+- [PERADI security fixes](peradi-security.md) — private object storage endpoint requires requireAdmin; error handling added to DB routes
+- [PERADI URL routing](peradi-url-routing.md) — useUrlTab() hook with normalisePath() utility; base-path stripping must use startsWith not replace; trailing slash handled
+- [PERADI multi-role admin](peradi-multi-role.md) — full_access/registrasi/keuangan/spectator roles; bcrypt DB auth; ensureSeedAdmin seeds from env vars; requireRole middleware
+- [PERADI live stats & hadir](peradi-live-stats.md) — /api/stats endpoint, live stat boxes, hadir field, TandaiHadir admin component
+- [Migration notes](migration-notes.md) — catatan teknis saat migrasi dari GitHub ke workspace Replit baru; tsconfig, deps, schema push
+- [PERADI migration to new workspace](peradi-migration-workspace.md) — file sync pattern, missing deps, object-storage-web tsconfig fix, voting auth fix, stats fetch BASE_URL

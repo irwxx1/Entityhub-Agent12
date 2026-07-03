@@ -12,6 +12,7 @@ export interface HealthStatus {
 export interface Stats {
   calon: number;
   peserta: number;
+  hadir: number;
 }
 
 export interface OkResponse {

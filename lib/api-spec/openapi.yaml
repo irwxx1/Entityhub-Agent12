@@ -490,9 +490,12 @@ components:
           type: integer
         peserta:
           type: integer
+        hadir:
+          type: integer
       required:
         - calon
         - peserta
+        - hadir
 
     OkResponse:
       type: object
