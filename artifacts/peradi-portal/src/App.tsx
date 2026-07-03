@@ -1370,22 +1370,26 @@ export default function App() {
   return (
     <div className="page">
       {/* ── Header ── */}
-      <header className="hdr" style={{ justifyContent: "center", padding: "10px 16px" }}>
-        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6, width: "100%", textAlign: "center" }}>
-          <img
-            src={logoPeradiNew}
-            alt="PERADI Suara Advokat Indonesia Medan"
-            style={{ height: 56, maxWidth: 280, objectFit: "contain", background: "#fff", borderRadius: 10, padding: "5px 12px", flexShrink: 0, boxShadow: "0 2px 10px rgba(0,0,0,.3)" }}
-          />
-          <div style={{ fontSize: 13, color: "rgba(255,255,255,.75)", fontWeight: 500, letterSpacing: 0.5 }}>
-            Dewan Pimpinan Cabang · Medan
-          </div>
+      <header className="hdr">
+        {/* Kiri: teks identitas */}
+        <div className="hdr-text">
+          <div className="hdr-label">PORTAL RESMI</div>
+          <div className="hdr-sub">Dewan Pimpinan Cabang</div>
+          <div className="hdr-title">PERADI SAI Medan</div>
         </div>
+        {/* Divider */}
+        <div className="hdr-divider" />
+        {/* Kanan: logo */}
+        <img
+          src={logoPeradiNew}
+          alt="PERADI Suara Advokat Indonesia Medan"
+          className="hdr-logo"
+        />
       </header>
 
       {/* ── Tabs ── */}
       <div className="tabs-wrap">
-        <div className="tabs tabs-row1">
+        <div className="tabs-row1">
           {PORTAL_TABS.map(t => (
             <button key={t.id} className={`tab-btn ${tab === t.id ? "active" : ""}`} onClick={() => setTab(t.id)}>
               <i className={`ti ${t.icon}`} />{t.label}

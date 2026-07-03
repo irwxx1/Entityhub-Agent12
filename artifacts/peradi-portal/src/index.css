@@ -35,62 +35,105 @@ body {
 
 /* ── Header ── */
 .hdr {
-  background: var(--navy);
-  color: #fff;
-  padding: 10px 16px;
+  background: #fff;
+  color: var(--navy);
+  padding: 10px 18px;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 16px;
   position: sticky;
   top: 0;
   z-index: 100;
-  box-shadow: 0 2px 12px rgba(0,0,0,.25);
+  box-shadow: 0 2px 12px rgba(11,45,110,.12);
+  border-bottom: 3px solid var(--gold);
+}
+
+.hdr-text {
+  flex: 1;
+  min-width: 0;
+}
+.hdr-label {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  color: var(--gold);
+  text-transform: uppercase;
+  line-height: 1.2;
+}
+.hdr-sub {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--navy-light);
+  line-height: 1.3;
+  margin-top: 1px;
+}
+.hdr-title {
+  font-size: 20px;
+  font-weight: 900;
+  color: var(--navy);
+  letter-spacing: 0.5px;
+  line-height: 1.2;
+  margin-top: 2px;
+}
+.hdr-divider {
+  width: 2px;
+  height: 52px;
+  background: linear-gradient(180deg, transparent, var(--gold), transparent);
+  flex-shrink: 0;
+  border-radius: 1px;
+}
+.hdr-logo {
+  height: 52px;
+  max-width: 220px;
+  object-fit: contain;
+  flex-shrink: 0;
 }
 
 /* ── Tabs ── */
-/* header height: ~120px (54px logo + 2×text + gaps + 20px padding) */
+/* header height: ~88px (52px logo + texts + 20px padding + 3px border) */
 .tabs-wrap {
   background: var(--surface);
   border-bottom: 1px solid var(--border);
   position: sticky;
-  top: 120px;
+  top: 88px;
   z-index: 90;
   box-shadow: 0 2px 8px rgba(0,0,0,.06);
 }
 
-/* Row 1 — Portal tabs (box style) */
+/* Row 1 — Portal tabs, cyan 20%, full-width stretch */
 .tabs-row1 {
   display: flex;
-  justify-content: center;
+  background: rgba(0,188,212,0.12);
   overflow-x: auto;
   scrollbar-width: none;
-  padding: 6px 12px;
-  gap: 5px;
-  border-bottom: 1px solid var(--border);
+  padding: 6px 8px;
+  gap: 4px;
+  border-bottom: 1px solid rgba(0,188,212,0.25);
 }
 .tabs-row1::-webkit-scrollbar { display: none; }
 
 .tab-btn {
-  display: flex; align-items: center; gap: 4px;
-  padding: 7px 12px;
-  border: 1.5px solid rgba(0,188,212,0.30);
+  flex: 1;
+  display: flex; align-items: center; justify-content: center; gap: 4px;
+  padding: 7px 6px;
+  border: 1.5px solid rgba(0,188,212,0.35);
   background: rgba(0,188,212,0.10);
   cursor: pointer;
-  font-size: 12px; font-weight: 600; color: #1e293b;
+  font-size: 11.5px; font-weight: 600; color: var(--navy);
   border-radius: 7px; white-space: nowrap; transition: all .15s;
-  font-family: inherit; position: relative;
+  font-family: inherit; position: relative; min-width: 0;
 }
-.tab-btn i { font-size: 14px; }
-.tab-btn:hover { background: rgba(0,188,212,0.18); border-color: rgba(0,188,212,0.5); color: var(--navy); }
-.tab-btn.active { color: var(--navy); font-weight: 700; background: rgba(0,188,212,0.22); border-color: var(--navy); box-shadow: 0 0 0 2px rgba(11,45,110,0.12); }
+.tab-btn i { font-size: 13px; flex-shrink: 0; }
+.tab-btn:hover { background: rgba(0,188,212,0.22); border-color: rgba(0,188,212,0.6); color: var(--navy); }
+.tab-btn.active { color: var(--navy); font-weight: 700; background: rgba(0,188,212,0.30); border-color: var(--navy); box-shadow: 0 0 0 2px rgba(11,45,110,0.14); }
 .tab-btn.active::after { display: none; }
 
-/* Row 2 — e-MusCab tabs (menonjol) */
+/* Row 2 — e-MusCab tabs (menonjol) — same horizontal padding as row 1 */
 .tabs-row2 {
   display: flex;
   background: linear-gradient(135deg, var(--navy) 0%, #1a4a8e 100%);
-  padding: 6px 12px;
-  gap: 6px;
+  padding: 6px 8px;
+  gap: 4px;
   overflow-x: auto;
   scrollbar-width: none;
 }
