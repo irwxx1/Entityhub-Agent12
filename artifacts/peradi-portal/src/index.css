@@ -123,12 +123,12 @@ body {
   border-color: rgba(255,255,255,.4);
 }
 .tab-muscab-active {
-  background: var(--gold) !important;
-  color: var(--navy-dark) !important;
-  border-color: var(--gold) !important;
-  box-shadow: 0 2px 10px rgba(201,162,39,.45);
+  background: #be123c !important;
+  color: #fff !important;
+  border-color: #9f1239 !important;
+  box-shadow: 0 2px 10px rgba(190,18,60,.45);
 }
-.tab-muscab-active i { color: var(--navy-dark); }
+.tab-muscab-active i { color: #fff; }
 
 /* ── Content ── */
 .content { flex: 1; padding: 16px; max-width: 720px; margin: 0 auto; width: 100%; }
@@ -262,9 +262,10 @@ body {
 }
 .tab-muscab-daftar.tab-muscab-active {
   animation: none !important;
-  background: var(--gold) !important;
-  color: var(--navy-dark) !important;
-  border-color: var(--gold) !important;
+  background: #be123c !important;
+  color: #fff !important;
+  border-color: #9f1239 !important;
+  box-shadow: 0 2px 10px rgba(190,18,60,.45) !important;
 }
 
 /* ── LIVE chip pada tab Kuorum & Rekapan ── */
