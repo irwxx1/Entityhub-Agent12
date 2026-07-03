@@ -1,0 +1,27 @@
+kind = "web"
+previewPath = "/"
+title = "Portal MUSCAB II PERADI SAI Medan"
+version = "1.0.0"
+id = "artifacts/peradi-portal"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 21575
+
+[services.development]
+run = "pnpm --filter @workspace/peradi-portal run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/peradi-portal", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/peradi-portal/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "21575"
+BASE_PATH = "/"

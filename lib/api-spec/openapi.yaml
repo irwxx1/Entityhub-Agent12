@@ -3,13 +3,21 @@ info:
   # Do not change the title, if the title changes, the import paths will be broken
   title: Api
   version: 0.1.0
-  description: API specification
+  description: API specification for Portal DPC PERADI SAI Medan MUSCAB II
 servers:
   - url: /api
     description: Base API path
 tags:
   - name: health
     description: Health operations
+  - name: peserta
+    description: Pendaftaran peserta MUSCAB
+  - name: admin
+    description: Admin authentication and management
+  - name: member
+    description: Registrasi dan autentikasi anggota/pengguna umum
+  - name: forum
+    description: Forum diskusi anggota
 paths:
   /healthz:
     get:
@@ -24,6 +32,447 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+
+  /peserta:
+    post:
+      operationId: submitPeserta
+      tags: [peserta]
+      summary: Daftar peserta MUSCAB
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PesertaInput"
+      responses:
+        "201":
+          description: Berhasil didaftarkan
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Peserta"
+        "400":
+          description: Data tidak valid
+
+  /stats:
+    get:
+      operationId: getStats
+      tags: [peserta]
+      summary: Statistik pendaftaran live
+      responses:
+        "200":
+          description: Jumlah calon dan peserta terverifikasi
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Stats"
+
+  /admin/login:
+    post:
+      operationId: adminLogin
+      tags: [admin]
+      summary: Login admin
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AdminLoginInput"
+      responses:
+        "200":
+          description: Login berhasil
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AdminSession"
+        "401":
+          description: Kredensial salah
+
+  /admin/logout:
+    post:
+      operationId: adminLogout
+      tags: [admin]
+      summary: Logout admin
+      responses:
+        "200":
+          description: Logout berhasil
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OkResponse"
+
+  /admin/me:
+    get:
+      operationId: adminMe
+      tags: [admin]
+      summary: Info admin yang sedang login
+      responses:
+        "200":
+          description: Data admin session
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AdminSession"
+        "401":
+          description: Belum login
+
+  /admin/peserta:
+    get:
+      operationId: listAdminPeserta
+      tags: [admin]
+      summary: Daftar semua peserta (admin)
+      parameters:
+        - name: search
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Daftar peserta
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Peserta"
+
+  /admin/peserta/{id}:
+    patch:
+      operationId: updateAdminPeserta
+      tags: [admin]
+      summary: Update data peserta (admin)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PesertaUpdate"
+      responses:
+        "200":
+          description: Data peserta diupdate
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Peserta"
+        "404":
+          description: Peserta tidak ditemukan
+    delete:
+      operationId: deleteAdminPeserta
+      tags: [admin]
+      summary: Hapus peserta (full_access only)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Peserta dihapus
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OkResponse"
+
+  /admin/users:
+    get:
+      operationId: listAdminUsers
+      tags: [admin]
+      summary: Daftar semua admin user (full_access only)
+      responses:
+        "200":
+          description: Daftar admin users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/AdminUser"
+    post:
+      operationId: createAdminUser
+      tags: [admin]
+      summary: Buat admin user baru (full_access only)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AdminUserInput"
+      responses:
+        "201":
+          description: Admin user dibuat
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AdminUser"
+
+  /admin/users/{id}:
+    patch:
+      operationId: updateAdminUser
+      tags: [admin]
+      summary: Update admin user (full_access only)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AdminUserUpdate"
+      responses:
+        "200":
+          description: Admin user diupdate
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AdminUser"
+    delete:
+      operationId: deleteAdminUser
+      tags: [admin]
+      summary: Hapus admin user (full_access only)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Admin user dihapus
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OkResponse"
+
+  /peserta/cek:
+    get:
+      operationId: cekPeserta
+      tags: [peserta]
+      summary: Cek status pendaftaran peserta (publik)
+      parameters:
+        - name: search
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Daftar peserta (data terbatas, publik)
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/PesertaPublik"
+
+  /suara:
+    get:
+      operationId: getSuara
+      tags: [peserta]
+      summary: Data suara rekapan live
+      responses:
+        "200":
+          description: Data suara per posisi
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuaraData"
+
+  /admin/suara:
+    patch:
+      operationId: updateAdminSuara
+      tags: [admin]
+      summary: Update jumlah suara (full_access only)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SuaraUpdateInput"
+      responses:
+        "200":
+          description: Suara diupdate
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuaraData"
+
+  /admin/peserta/export:
+    get:
+      operationId: exportAdminPeserta
+      tags: [admin]
+      summary: Export data peserta ke CSV (admin only)
+      responses:
+        "200":
+          description: File CSV data peserta
+          content:
+            text/csv:
+              schema:
+                type: string
+
+  /member/register:
+    post:
+      operationId: registerMember
+      tags: [member]
+      summary: Registrasi akun pengguna baru
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MemberRegisterInput"
+      responses:
+        "201":
+          description: Registrasi berhasil
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MemberSession"
+        "409":
+          description: Email sudah terdaftar
+
+  /member/login:
+    post:
+      operationId: loginMember
+      tags: [member]
+      summary: Login pengguna
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MemberLoginInput"
+      responses:
+        "200":
+          description: Login berhasil
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MemberSession"
+        "401":
+          description: Kredensial salah
+
+  /member/logout:
+    post:
+      operationId: logoutMember
+      tags: [member]
+      summary: Logout pengguna
+      responses:
+        "200":
+          description: Logout berhasil
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OkResponse"
+
+  /member/me:
+    get:
+      operationId: memberMe
+      tags: [member]
+      summary: Info pengguna yang sedang login
+      responses:
+        "200":
+          description: Data sesi pengguna
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MemberSession"
+        "401":
+          description: Belum login
+
+  /forum/topics:
+    get:
+      operationId: listForumTopics
+      tags: [forum]
+      summary: Daftar topik forum diskusi
+      responses:
+        "200":
+          description: Daftar topik
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ForumTopic"
+    post:
+      operationId: createForumTopic
+      tags: [forum]
+      summary: Buat topik diskusi baru (harus login)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ForumTopicInput"
+      responses:
+        "201":
+          description: Topik dibuat
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ForumTopic"
+        "401":
+          description: Belum login
+
+  /forum/topics/{id}:
+    get:
+      operationId: getForumTopic
+      tags: [forum]
+      summary: Detail topik & balasan
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Detail topik
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ForumTopicDetail"
+        "404":
+          description: Topik tidak ditemukan
+
+  /forum/topics/{id}/replies:
+    post:
+      operationId: createForumReply
+      tags: [forum]
+      summary: Kirim balasan pada topik (harus login)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ForumReplyInput"
+      responses:
+        "201":
+          description: Balasan dikirim
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ForumReply"
+        "401":
+          description: Belum login
+
 components:
   schemas:
     HealthStatus:
@@ -34,3 +483,350 @@ components:
       required:
         - status
 
+    Stats:
+      type: object
+      properties:
+        calon:
+          type: integer
+        peserta:
+          type: integer
+      required:
+        - calon
+        - peserta
+
+    OkResponse:
+      type: object
+      properties:
+        ok:
+          type: boolean
+      required:
+        - ok
+
+    AdminSessionRole:
+      type: string
+      enum: [full_access, registrasi, keuangan, spectator]
+
+    AdminSession:
+      type: object
+      properties:
+        username:
+          type: string
+        role:
+          $ref: "#/components/schemas/AdminSessionRole"
+      required:
+        - username
+        - role
+
+    AdminLoginInput:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+      required:
+        - username
+        - password
+
+    AdminUser:
+      type: object
+      properties:
+        id:
+          type: string
+        username:
+          type: string
+        role:
+          $ref: "#/components/schemas/AdminSessionRole"
+        createdAt:
+          type: string
+      required:
+        - id
+        - username
+        - role
+
+    AdminUserInput:
+      type: object
+      properties:
+        username:
+          type: string
+          minLength: 3
+        password:
+          type: string
+          minLength: 6
+        role:
+          $ref: "#/components/schemas/AdminSessionRole"
+      required:
+        - username
+        - password
+        - role
+
+    AdminUserUpdate:
+      type: object
+      properties:
+        password:
+          type: string
+          minLength: 6
+        role:
+          $ref: "#/components/schemas/AdminSessionRole"
+
+    Peserta:
+      type: object
+      properties:
+        id:
+          type: string
+        nama:
+          type: string
+        nia:
+          type: string
+        alamat:
+          type: string
+        hp:
+          type: string
+        email:
+          type: string
+        statusNia:
+          type: string
+          enum: [pending, aktif, tidak_aktif]
+        statusBayar:
+          type: string
+          enum: [menunggu, terverifikasi, ditolak]
+        hadir:
+          type: boolean
+        selfiePath:
+          type: ["string", "null"]
+        buktiPath:
+          type: ["string", "null"]
+        fotoKtaPath:
+          type: ["string", "null"]
+        catatanAdmin:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+      required:
+        - id
+        - nama
+        - nia
+        - alamat
+        - hp
+        - email
+        - statusNia
+        - statusBayar
+        - hadir
+        - createdAt
+        - updatedAt
+
+    PesertaInput:
+      type: object
+      properties:
+        nama:
+          type: string
+          minLength: 1
+        nia:
+          type: string
+          minLength: 1
+        alamat:
+          type: string
+          minLength: 1
+        hp:
+          type: string
+          minLength: 1
+        email:
+          type: string
+        selfiePath:
+          type: ["string", "null"]
+        buktiPath:
+          type: ["string", "null"]
+        fotoKtaPath:
+          type: ["string", "null"]
+      required:
+        - nama
+        - nia
+        - alamat
+        - hp
+        - email
+
+    PesertaUpdate:
+      type: object
+      properties:
+        statusNia:
+          type: string
+          enum: [pending, aktif, tidak_aktif]
+        statusBayar:
+          type: string
+          enum: [menunggu, terverifikasi, ditolak]
+        hadir:
+          type: boolean
+        catatanAdmin:
+          type: ["string", "null"]
+
+    PesertaPublik:
+      type: object
+      properties:
+        id:
+          type: string
+        nama:
+          type: string
+        nia:
+          type: string
+        statusNia:
+          type: string
+          enum: [pending, aktif, tidak_aktif]
+        statusBayar:
+          type: string
+          enum: [menunggu, terverifikasi, ditolak]
+        createdAt:
+          type: string
+      required:
+        - id
+        - nama
+        - nia
+        - statusNia
+        - statusBayar
+        - createdAt
+
+    SuaraData:
+      type: object
+      properties:
+        ketua:
+          type: array
+          items:
+            type: integer
+        sekjend:
+          type: array
+          items:
+            type: integer
+      required:
+        - ketua
+        - sekjend
+
+    SuaraUpdateInput:
+      type: object
+      properties:
+        posisi:
+          type: string
+          enum: [ketua, sekjend]
+        calonIndex:
+          type: integer
+          minimum: 0
+          maximum: 1
+        jumlahSuara:
+          type: integer
+          minimum: 0
+      required:
+        - posisi
+        - calonIndex
+        - jumlahSuara
+
+    MemberSession:
+      type: object
+      properties:
+        nama:
+          type: string
+        email:
+          type: string
+      required:
+        - nama
+        - email
+
+    MemberRegisterInput:
+      type: object
+      properties:
+        nama:
+          type: string
+          minLength: 1
+        email:
+          type: string
+        password:
+          type: string
+          minLength: 6
+      required:
+        - nama
+        - email
+        - password
+
+    MemberLoginInput:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+      required:
+        - email
+        - password
+
+    ForumTopic:
+      type: object
+      properties:
+        id:
+          type: string
+        judul:
+          type: string
+        isi:
+          type: string
+        namaPenulis:
+          type: string
+        jumlahBalasan:
+          type: integer
+        createdAt:
+          type: string
+      required:
+        - id
+        - judul
+        - isi
+        - namaPenulis
+        - jumlahBalasan
+        - createdAt
+
+    ForumTopicInput:
+      type: object
+      properties:
+        judul:
+          type: string
+          minLength: 3
+        isi:
+          type: string
+          minLength: 1
+      required:
+        - judul
+        - isi
+
+    ForumReply:
+      type: object
+      properties:
+        id:
+          type: string
+        isi:
+          type: string
+        namaPenulis:
+          type: string
+        createdAt:
+          type: string
+      required:
+        - id
+        - isi
+        - namaPenulis
+        - createdAt
+
+    ForumReplyInput:
+      type: object
+      properties:
+        isi:
+          type: string
+          minLength: 1
+      required:
+        - isi
+
+    ForumTopicDetail:
+      allOf:
+        - $ref: "#/components/schemas/ForumTopic"
+        - type: object
+          properties:
+            replies:
+              type: array
+              items:
+                $ref: "#/components/schemas/ForumReply"
+          required:
+            - replies

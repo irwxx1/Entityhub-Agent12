@@ -1,0 +1,3 @@
+- [PERADI portal architecture](peradi-portal-arch.md) — monorepo structure, key libs, env vars, permanent constraints, DB columns, Rekapan Live status
+- [PERADI migration to new workspace](peradi-migration-workspace.md) — file sync from GitHub irwxx1/Memory-Execution-Agent, artifact registration pattern, DB schema created via executeSql
+- [PERADI security and auth](peradi-security.md) — bcrypt auth, requireRole middleware, suara voting is full_access only
