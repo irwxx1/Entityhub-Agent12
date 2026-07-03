@@ -2,6 +2,7 @@ import { useState, useRef, useEffect, useMemo, useCallback } from "react";
 import { useUpload } from "@workspace/object-storage-web";
 import { useSubmitPeserta, useGetSuara, useCekPeserta, useGetStats, getGetSuaraQueryKey, getCekPesertaQueryKey, getGetStatsQueryKey } from "@workspace/api-client-react";
 import logoPeradi from "/logo-peradi.png";
+import logoPeradiNew from "/logo-peradi-new.png";
 import "./index.css";
 
 /* ─── CONSTANTS ─────────────────────────────────────────────────────── */
@@ -1370,17 +1371,14 @@ export default function App() {
     <div className="page">
       {/* ── Header ── */}
       <header className="hdr" style={{ justifyContent: "center", padding: "10px 16px" }}>
-        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 5, width: "100%", textAlign: "center" }}>
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6, width: "100%", textAlign: "center" }}>
           <img
-            src={logoPeradi}
+            src={logoPeradiNew}
             alt="PERADI Suara Advokat Indonesia Medan"
-            style={{ height: 54, width: 54, objectFit: "contain", background: "#fff", borderRadius: "50%", padding: 5, flexShrink: 0, boxShadow: "0 2px 8px rgba(0,0,0,.25)" }}
+            style={{ height: 56, maxWidth: 280, objectFit: "contain", background: "#fff", borderRadius: 10, padding: "5px 12px", flexShrink: 0, boxShadow: "0 2px 10px rgba(0,0,0,.3)" }}
           />
-          <div style={{ fontSize: 15, fontWeight: 800, color: "#fff", letterSpacing: 1, lineHeight: 1.25, textTransform: "uppercase" }}>
-            PERADI Suara Advokat Indonesia Medan
-          </div>
-          <div style={{ fontSize: 11, color: "rgba(255,255,255,.7)", fontWeight: 500, letterSpacing: 0.5 }}>
-            Dewan Pimpinan Cabang
+          <div style={{ fontSize: 13, color: "rgba(255,255,255,.75)", fontWeight: 500, letterSpacing: 0.5 }}>
+            Dewan Pimpinan Cabang · Medan
           </div>
         </div>
       </header>
@@ -1403,6 +1401,11 @@ export default function App() {
             >
               <i className={`ti ${t.icon}`} />
               <span>{t.label}</span>
+              {(t.id === "kuorum" || t.id === "hasil") && (
+                <span className="live-chip">
+                  <span className="live-chip-dot" />LIVE
+                </span>
+              )}
             </button>
           ))}
         </div>
